@@ -2,6 +2,7 @@ package com.colegio.quintaapi.service
 
 import com.colegio.quintaapi.model.Colegio
 import com.colegio.quintaapi.model.Estudiante
+import com.colegio.quintaapi.repository.ColegioRepository
 import com.colegio.quintaapi.repository.EstudianteRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -16,6 +17,10 @@ class EstudianteService {
     lateinit var estudianteRepository: EstudianteRepository
 
 
+    @Autowired
+    lateinit var colegioRepository: ColegioRepository
+
+
     fun list(): List<Estudiante> {
 
         return estudianteRepository.findAll()
@@ -25,12 +30,18 @@ class EstudianteService {
         //validacion
 
         try {
+
+            colegioRepository.findById(estudiante.colegioId)
+                ?: throw Exception("id E no existe")
+
             if (estudiante.nombreE.equals("") || estudiante.apellido .equals("")) {
                 throw Exception("completar campo")
             } else {
                 return estudianteRepository.save(estudiante)
             }
+
         }
+
         catch(ex: Exception) {
             throw ResponseStatusException(
                 HttpStatus.NOT_FOUND, ex.message, ex)
@@ -42,6 +53,7 @@ class EstudianteService {
     fun update(estudiante: Estudiante):Estudiante {
 
         try {
+
             val response = estudianteRepository.findById(estudiante.id)
                 ?: throw Exception("El ID ${estudiante.id}  no existe")
 

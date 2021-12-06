@@ -2,6 +2,8 @@ package com.colegio.quintaapi.service
 
 import com.colegio.quintaapi.model.Asignaturas
 import com.colegio.quintaapi.repository.AsignaturasRepository
+import com.colegio.quintaapi.repository.ColegioRepository
+import com.colegio.quintaapi.repository.EstudianteRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -14,16 +16,25 @@ class AsignaturasService {
     @Autowired
     lateinit var asignaturasRepository: AsignaturasRepository
 
+    @Autowired
+    lateinit var colegioRepository: ColegioRepository
+
+    @Autowired
+    lateinit var estudianteRepository: EstudianteRepository
+
 
     fun list(): List<Asignaturas> {
         return asignaturasRepository.findAll()
     }
 
     fun save(asignaturas: Asignaturas): Asignaturas {
-
         //validacion de guaradar la materia si... esta esta con el nombre del estudiante
 
         try {
+
+            estudianteRepository.findById(asignaturas.estudianteId)
+                ?: throw Exception("id E no existe")
+
             if (asignaturas.descricion .equals("") ) {
                 throw Exception("completar el campo")
             } else {
