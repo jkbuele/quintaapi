@@ -1,9 +1,12 @@
 package com.colegio.quintaapi.service
 
+import com.colegio.quintaapi.model.Colegio
 import com.colegio.quintaapi.model.Estudiante
 import com.colegio.quintaapi.repository.EstudianteRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 
 
 @Service
@@ -18,23 +21,59 @@ class EstudianteService {
         return estudianteRepository.findAll()
     }
 
-    fun save(estudiante: Estudiante): Estudiante {
-        return estudianteRepository.save(estudiante)
+    fun save(estudiante: Estudiante): Estudiante{
+        //validacion
+
+        try {
+            if (estudiante.nombreE.equals("") || estudiante.apellido .equals("")) {
+                throw Exception("completar campo")
+            } else {
+                return estudianteRepository.save(estudiante)
+            }
+        }
+        catch(ex: Exception) {
+            throw ResponseStatusException(
+                HttpStatus.NOT_FOUND, ex.message, ex)
+        }
+
     }
 
+
     fun update(estudiante: Estudiante):Estudiante {
-        return estudianteRepository.save(estudiante)
+
+        try {
+            val response = estudianteRepository.findById(estudiante.id)
+                ?: throw Exception("El ID ${estudiante.id}  no existe")
+
+            if (estudiante.nombreE.equals("") || estudiante.apellido.equals("")) {
+                throw Exception("completar el campo ")
+            } else {
+                return estudianteRepository.save(estudiante)
+            }
+        }
+        catch (ex: Exception){
+            throw ResponseStatusException(
+                HttpStatus.NOT_FOUND, "ID no existe", ex)
+        }
     }
 
     fun updateNombre (estudiante: Estudiante):Estudiante {
-        val response = estudianteRepository.findById(estudiante.id)
-            ?: throw Exception()
-        response.apply {
-            this.nombreE=estudiante.nombreE
+        try {
+            if (estudiante.nombreE.equals("")) {
+                throw Exception("campo vacío")
+            }
+            val response = estudianteRepository.findById(estudiante.id)
+                ?: throw Exception("El ID ${estudiante.id}  no existe")
+            response.apply {
+                this.nombreE = estudiante.nombreE
+            }
+            return estudianteRepository.save(response)
         }
-        return estudianteRepository.save(response)
+        catch (ex: Exception) {
+            throw ResponseStatusException(
+                HttpStatus.NOT_FOUND, ex.message, ex)
+        }
     }
-
 
     fun delete (id:Long): Boolean{
         estudianteRepository.deleteById(id)
