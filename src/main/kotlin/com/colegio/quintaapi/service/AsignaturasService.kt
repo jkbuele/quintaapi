@@ -69,8 +69,9 @@ class AsignaturasService {
 
     fun updateDescricion (asignaturas: Asignaturas):Asignaturas {
         try {
-            if (asignaturas.descricion .equals("")){
-                throw Exception("campo vacío")}
+            asignaturas.descricion?.takeIf {it.trim().isNotEmpty()}
+                ?: throw Exception("campo vacío")
+
             val response = asignaturasRepository.findById(asignaturas.id)
                 ?: throw Exception("El ID ${asignaturas.id}  no existe")
             response.apply {

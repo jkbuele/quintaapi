@@ -71,9 +71,10 @@ class EstudianteService {
 
     fun updateNombre (estudiante: Estudiante):Estudiante {
         try {
-            if (estudiante.nombreE.equals("")) {
-                throw Exception("campo vacío")
-            }
+            estudiante.nombreE?.takeIf {it.trim().isNotEmpty()}
+                ?: throw Exception("campo vacío")
+
+
             val response = estudianteRepository.findById(estudiante.id)
                 ?: throw Exception("El ID ${estudiante.id}  no existe")
             response.apply {

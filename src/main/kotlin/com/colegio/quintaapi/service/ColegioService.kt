@@ -58,9 +58,9 @@ class ColegioService {
 
     fun updateDireccion(colegio: Colegio): Colegio {
         try {
-            if (colegio.nombreC.equals("")) {
-                throw Exception("campo vacío")
-            }
+            colegio.direccion?.takeIf {it.trim().isNotEmpty()}
+                ?: throw Exception("campo vacío")
+
             val response = colegioRepository.findById(colegio.id)
                 ?: throw Exception("El ID ${colegio.id}  no existe")
             response.apply {
