@@ -134,66 +134,9 @@ class UserService {
     }
 
     fun validarCedula(cedula: String) : Boolean{
+       var cedula = (cedula )
+        return cedula
 
-        val primerosNumeros = cedula.substring(0, 2)
-        val numero1 = cedula.substring(0, 1)
-        val numero2 = cedula.substring(1, 2)
-        val numero3 = cedula.substring(2, 3)
-        val numero4 = cedula.substring(3, 4)
-        val numero5 = cedula.substring(4, 5)
-        val numero6 = cedula.substring(5, 6)
-        val numero7 = cedula.substring(6, 7)
-        val numero8 = cedula.substring(7, 8)
-        val numero9 = cedula.substring(8, 9)
-        val numero10 = cedula.substring(9, 10)
-
-        if (cedula.length != 10) {
-            return false
-        }
-
-        if (primerosNumeros.toInt() < 1 || primerosNumeros.toInt() > 24) {
-            return false
-        }
-        if (numero3.toInt() > 6) {
-            return false
-        }
-        val par = (numero2.toInt() + numero4.toInt() + numero6.toInt() + numero8.toInt())
-
-        val ImparNumero1 = numero1.toInt() * 2
-        if (ImparNumero1 > 9) {
-            ImparNumero1 - 9
-        }
-        var ImparNumero3 = numero3.toInt() * 2
-        if (ImparNumero3 > 9) {
-            ImparNumero3 -= 9
-        }
-        var ImparNumero5 = numero5.toInt() * 2
-        if (ImparNumero5 > 9) {
-            ImparNumero5 -= 9
-        }
-        var ImparNumero7 = numero7.toInt() * 2
-        if (ImparNumero7 > 9) {
-            ImparNumero7 -= 9
-        }
-        var ImparNumero9 = numero9.toInt() * 2
-        if (ImparNumero9 > 9) {
-            ImparNumero9 -= 9
-        }
-
-        val impares = ImparNumero1 + ImparNumero3 + ImparNumero5 +ImparNumero7 + ImparNumero9
-        val sumTotal = (par + impares)
-
-        val operation = (sumTotal/10) + 1
-        var valida = (operation*10) - sumTotal
-        if (valida == 10) {
-            valida = 0
-        }
-        if (valida!= numero10.toInt()){
-            return false
-        }
-        return true
     }
-
-
 
 }
