@@ -30,23 +30,19 @@ class EstudianteService {
         //validacion
 
         try {
-
             colegioRepository.findById(estudiante.colegioId)
-                ?: throw Exception("id E no existe")
+                ?: throw Exception("id del colegio no existe")
 
             if (estudiante.nombreE.equals("") || estudiante.apellido .equals("")) {
                 throw Exception("completar campo")
             } else {
                 return estudianteRepository.save(estudiante)
             }
-
         }
-
         catch(ex: Exception) {
             throw ResponseStatusException(
                 HttpStatus.NOT_FOUND, ex.message, ex)
         }
-
     }
 
 
@@ -72,11 +68,11 @@ class EstudianteService {
     fun updateNombre (estudiante: Estudiante):Estudiante {
         try {
             estudiante.nombreE?.takeIf {it.trim().isNotEmpty()}
-                ?: throw Exception("campo vacío")
+                ?: throw Exception("El campo nombre esta vacío")
 
 
             val response = estudianteRepository.findById(estudiante.id)
-                ?: throw Exception("El ID ${estudiante.id}  no existe")
+                ?: throw Exception("El ID ${estudiante.id} de estudiante no existe")
             response.apply {
                 this.nombreE = estudiante.nombreE
             }

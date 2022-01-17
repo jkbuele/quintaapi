@@ -26,7 +26,7 @@ class ColegioService {
 
         try {
             if (colegio.nombreC.equals("") || colegio.direccion.equals("")) {
-                throw Exception("completar el campo")
+                throw Exception("completar el campo Nombre")
             } else {
                 return colegioRepository.save(colegio)
             }
@@ -59,12 +59,12 @@ class ColegioService {
     fun updateDireccion(colegio: Colegio): Colegio {
         try {
             colegio.direccion?.takeIf {it.trim().isNotEmpty()}
-                ?: throw Exception("campo vacío")
+                ?: throw Exception("campo direccion vacio")
 
             val response = colegioRepository.findById(colegio.id)
-                ?: throw Exception("El ID ${colegio.id}  no existe")
+                ?: throw Exception("El ID ${colegio.id} del colegio no existe")
             response.apply {
-                this.nombreC = colegio.nombreC
+                this.direccion = colegio.direccion
             }
             return colegioRepository.save(response)
         }

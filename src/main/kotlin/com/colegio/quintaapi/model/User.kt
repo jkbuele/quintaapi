@@ -5,7 +5,7 @@ import javax.persistence.*
 
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 
 class User {
 
@@ -15,5 +15,6 @@ class User {
     var id: Long? = null
     var username: String? = null
     var password: String? = null
+    var cedula: String? = null
 
 }
