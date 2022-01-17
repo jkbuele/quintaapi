@@ -11,7 +11,6 @@ class Colegio {
     @Id
     @Column(updatable = false)
     var id: Long? = null
-
     var nombreC: String? = null
     var direccion: String? = null
 }

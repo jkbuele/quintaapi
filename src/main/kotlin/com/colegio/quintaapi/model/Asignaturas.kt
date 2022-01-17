@@ -13,7 +13,6 @@ class Asignaturas {
     @Id
     @Column(updatable = false)
     var id: Long? = null
-
     var descricion: String? = null
 
     @Column(name = "estudiante_id")

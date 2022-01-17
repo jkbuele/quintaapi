@@ -7,6 +7,7 @@ import com.colegio.quintaapi.repository.EstudianteRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.server.ResponseStatusException
 
 
@@ -27,13 +28,13 @@ class AsignaturasService {
         return asignaturasRepository.findAll()
     }
 
-    fun save(asignaturas: Asignaturas): Asignaturas {
-        //validacion de guaradar la materia si... esta esta con el nombre del estudiante
+    fun save(@RequestBody asignaturas: Asignaturas): Asignaturas {
 
         try {
 
-            estudianteRepository.findById(asignaturas.estudianteId)
-                ?: throw Exception("id E no existe")
+
+            asignaturas.descricion?.takeIf { it.trim().isNotEmpty() }
+                ?: throw Exception("El campo descricion se encuentra vacio")
 
             if (asignaturas.descricion .equals("") ) {
                 throw Exception("completar el campo")
@@ -70,10 +71,10 @@ class AsignaturasService {
     fun updateDescricion (asignaturas: Asignaturas):Asignaturas {
         try {
             asignaturas.descricion?.takeIf {it.trim().isNotEmpty()}
-                ?: throw Exception("campo vacío")
+                ?: throw Exception("El campo descripcion vacío")
 
             val response = asignaturasRepository.findById(asignaturas.id)
-                ?: throw Exception("El ID ${asignaturas.id}  no existe")
+                ?: throw Exception("El ID ${asignaturas.id} de asignaturas no existe")
             response.apply {
                 this.descricion = asignaturas.descricion
             }
@@ -88,8 +89,15 @@ class AsignaturasService {
     }
 
 
-    fun delete (id:Long): Boolean{
-        asignaturasRepository.deleteById(id)
+    fun delete (idAsignaturas:Long): Boolean{
+        asignaturasRepository.deleteById(idAsignaturas)
+        return true
+    }
+
+    fun verificacionLetras(descricion:String?): Boolean{
+        if(descricion?.length!! == 20){
+            return false
+        }
         return true
     }
 
