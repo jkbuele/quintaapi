@@ -31,8 +31,6 @@ class AsignaturasService {
     fun save(@RequestBody asignaturas: Asignaturas): Asignaturas {
 
         try {
-
-
             asignaturas.descricion?.takeIf { it.trim().isNotEmpty() }
                 ?: throw Exception("El campo descricion se encuentra vacio")
 
@@ -65,7 +63,6 @@ class AsignaturasService {
             throw ResponseStatusException(
                 HttpStatus.NOT_FOUND, "ID no existe", ex)
         }
-
     }
 
     fun updateDescricion (asignaturas: Asignaturas):Asignaturas {

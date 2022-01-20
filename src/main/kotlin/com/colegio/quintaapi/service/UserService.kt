@@ -132,11 +132,12 @@ class UserService {
         return response
 
     }
-
     fun validarCedula(cedula: String) : Boolean{
-       var cedula = (cedula )
-        return cedula
+         var cedula = (cedula )
+        return true
 
     }
+
+
 
 }

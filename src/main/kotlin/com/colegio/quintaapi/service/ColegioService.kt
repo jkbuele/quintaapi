@@ -25,11 +25,12 @@ class ColegioService {
         //validacion
 
         try {
-            if (colegio.nombreC.equals("") || colegio.direccion.equals("")) {
-                throw Exception("completar el campo Nombre")
-            } else {
+            colegio.nombreC?.takeIf { it.trim().isNotEmpty() }
+                ?: throw Exception("Descripción no debe ser vacio")
+            colegio.direccion?.takeIf { it.trim().isNotEmpty() }
+                ?: throw Exception("Descripción no debe ser vacio")
                 return colegioRepository.save(colegio)
-            }
+
         }
         catch(ex: Exception) {
             throw ResponseStatusException(
