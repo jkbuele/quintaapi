@@ -56,8 +56,4 @@ class UserServiceTest {
         val response = userService.validarCedula("0150265755")
         Assertions.assertEquals(false,response)
     }
-
-
-
-
 }
