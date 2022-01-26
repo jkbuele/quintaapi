@@ -14,6 +14,7 @@ import java.io.File
 
 @SpringBootTest
 class ColegioServiceTest {
+
     @InjectMocks
     lateinit var colegioService: ColegioService
 
@@ -23,7 +24,7 @@ class ColegioServiceTest {
     val returnObject: Colegio = Colegio().apply {
         id = 1
         nombreC = "salesianas"
-        direccion =  "cuenca"
+        direccion = "cuenca"
 
     }
     val newObject: Colegio = Colegio().apply {
@@ -54,18 +55,73 @@ class ColegioServiceTest {
     }
 
     @Test
-    fun saveColegioFailedNombreC(){
+    fun saveColegioFailedNombreC() {
         Assertions.assertThrows(Exception::class.java) {
-            colegioMock.apply { nombreC ="    "}
+            colegioMock.apply { nombreC = "    " }
             Mockito.`when`(colegioRepository.save(Mockito.any(Colegio::class.java))).thenReturn(colegioMock)
             colegioService.save(colegioMock)
-        }}
+        }
+    }
+
 
     @Test
-    fun saveColegioFailedDireccion(){
+    fun saveColegioFailedDireccion() {
         Assertions.assertThrows(Exception::class.java) {
-            colegioMock.apply { direccion ="    "}
+            colegioMock.apply {
+                direccion = "    "
+            }
             Mockito.`when`(colegioRepository.save(Mockito.any(Colegio::class.java))).thenReturn(colegioMock)
             colegioService.save(colegioMock)
-        }}
+        }
+    }
+
+    @Test
+    fun updateIsIdColegioCorrect() {
+        Mockito.`when`(colegioRepository.findById(returnObject.id)).thenReturn(returnObject)
+        Mockito.`when`(colegioRepository.save(Mockito.any(Colegio::class.java))).thenReturn(returnObject)
+        val response = colegioService.save(colegioMock)
+        Assertions.assertEquals(response.id, colegioMock.id)
+        Assertions.assertEquals(response.nombreC, colegioMock.nombreC)
+        Assertions.assertEquals(response.direccion, colegioMock.direccion)
+    }
+
+    @Test
+    fun updatedIdNotExitsFailed() {
+
+        Assertions.assertThrows(Exception::class.java) {
+            Mockito.`when`(colegioRepository.findById(returnObject.id)).thenReturn(null)
+            Mockito.`when`(colegioRepository.save(Mockito.any(Colegio::class.java))).thenReturn(returnObject)
+            colegioService.update(colegioMock)
+
+        }
+    }
+
+    @Test
+    fun updateIsFailedNombrecIsNull() {
+        Assertions.assertThrows(Exception::class.java) {
+            colegioMock.apply {
+                nombreC = " "
+            }
+            Mockito.`when`(colegioRepository.findById(colegioMock.id)).thenReturn(colegioMock)
+            Mockito.`when`(colegioRepository.save(Mockito.any(Colegio::class.java))).thenReturn(colegioMock)
+            colegioService.update(colegioMock)
+
+        }
+    }
+
+    @Test
+    fun updateIsFailedDireccionIsNull() {
+        Assertions.assertThrows(Exception::class.java) {
+            colegioMock.apply {
+                direccion = " "
+            }
+            Mockito.`when`(colegioRepository.findById(colegioMock.id)).thenReturn(colegioMock)
+            Mockito.`when`(colegioRepository.save(Mockito.any(Colegio::class.java))).thenReturn(colegioMock)
+            colegioService.update(colegioMock)
+
+        }
+    }
+
+
+
 }

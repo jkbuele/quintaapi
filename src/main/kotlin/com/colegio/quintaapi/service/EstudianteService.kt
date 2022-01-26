@@ -26,67 +26,78 @@ class EstudianteService {
         return estudianteRepository.findAll()
     }
 
-    fun save(estudiante: Estudiante): Estudiante{
-        //validacion
-
+    fun save(estudiante: Estudiante): Estudiante {
         try {
             colegioRepository.findById(estudiante.colegioId)
                 ?: throw Exception("id del colegio no existe")
+            /*val response = colegioRepository.findById(estudiante.colegioId)
+                ?: throw Exception("El ID ${estudiante.colegioId}  no existe")*/
 
-            if (estudiante.nombreE.equals("") || estudiante.apellido .equals("")) {
-                throw Exception("completar campo")
-            } else {
-                return estudianteRepository.save(estudiante)
-            }
-        }
-        catch(ex: Exception) {
+            estudiante.nombreE?.takeIf { it.trim().isNotEmpty() }
+                ?: throw Exception("Nombre Estudiante no debe ser vacio")
+
+            estudiante.apellido?.takeIf { it.trim().isNotEmpty() }
+                ?: throw Exception("Apellido no debe ser vacio")
+            return estudianteRepository.save(estudiante)
+
+        } catch (ex: Exception) {
             throw ResponseStatusException(
                 HttpStatus.NOT_FOUND, ex.message, ex)
         }
     }
 
 
-    fun update(estudiante: Estudiante):Estudiante {
+    fun update(estudiante: Estudiante): Estudiante {
 
         try {
 
             val response = estudianteRepository.findById(estudiante.id)
                 ?: throw Exception("El ID ${estudiante.id}  no existe")
 
-            if (estudiante.nombreE.equals("") || estudiante.apellido.equals("")) {
-                throw Exception("completar el campo ")
-            } else {
-                return estudianteRepository.save(estudiante)
-            }
-        }
-        catch (ex: Exception){
+            estudiante.nombreE?.takeIf { it.trim().isNotEmpty() }
+                ?: throw Exception("campo nombreE vacio")
+            estudiante.apellido?.takeIf { it.trim().isNotEmpty() }
+                ?: throw Exception("campo apellido vacio")
+
+            return estudianteRepository.save(estudiante)
+        } catch (ex: Exception) {
             throw ResponseStatusException(
-                HttpStatus.NOT_FOUND, "ID no existe", ex)
+                HttpStatus.NOT_FOUND, "ID no existe", ex
+            )
         }
     }
 
-    fun updateNombre (estudiante: Estudiante):Estudiante {
+    fun updateNombre(estudiante: Estudiante): Estudiante {
         try {
-            estudiante.nombreE?.takeIf {it.trim().isNotEmpty()}
-                ?: throw Exception("El campo nombre esta vacío")
-
 
             val response = estudianteRepository.findById(estudiante.id)
                 ?: throw Exception("El ID ${estudiante.id} de estudiante no existe")
+
+            estudiante.nombreE?.takeIf { it.trim().isNotEmpty() }
+                ?: throw Exception("El campo nombreE esta vacío")
+
             response.apply {
                 this.nombreE = estudiante.nombreE
             }
             return estudianteRepository.save(response)
-        }
-        catch (ex: Exception) {
+        } catch (ex: Exception) {
             throw ResponseStatusException(
-                HttpStatus.NOT_FOUND, ex.message, ex)
+                HttpStatus.NOT_FOUND, ex.message, ex
+            )
         }
     }
 
-    fun delete (id:Long): Boolean{
-        estudianteRepository.deleteById(id)
-        return true
-    }
+    fun delete(id : Long?): Boolean {
+        try {
+            estudianteRepository.findById(id)
+                ?: throw Exception("id no existe")
+            estudianteRepository.deleteById(id!!)
+            return true
 
+        } catch (ex: Exception) {
+            throw Exception()
+        }
+
+
+    }
 }

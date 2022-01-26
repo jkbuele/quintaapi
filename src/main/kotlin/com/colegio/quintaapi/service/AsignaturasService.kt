@@ -33,12 +33,8 @@ class AsignaturasService {
         try {
             asignaturas.descricion?.takeIf { it.trim().isNotEmpty() }
                 ?: throw Exception("El campo descricion se encuentra vacio")
+            return asignaturasRepository.save(asignaturas)
 
-            if (asignaturas.descricion .equals("") ) {
-                throw Exception("completar el campo")
-            } else {
-                return asignaturasRepository.save(asignaturas)
-            }
         }
         catch(ex: Exception) {
             throw ResponseStatusException(
@@ -53,11 +49,11 @@ class AsignaturasService {
             val response = asignaturasRepository.findById(asignaturas.id)
                 ?: throw Exception("El ID ${asignaturas.id}  no existe")
 
-            if (asignaturas.descricion .equals("") ) {
-                throw Exception("completar el campo")
-            } else {
-                return asignaturasRepository.save(asignaturas)
-            }
+            asignaturas.descricion ?.takeIf {it.trim().isNotEmpty()}
+                ?: throw Exception("campo descricion vacio")
+
+             return asignaturasRepository.save(asignaturas)
+
         }
         catch (ex: Exception){
             throw ResponseStatusException(
@@ -86,10 +82,26 @@ class AsignaturasService {
     }
 
 
-    fun delete (idAsignaturas:Long): Boolean{
+    fun delete (idAsignaturas :Long): Boolean{
         asignaturasRepository.deleteById(idAsignaturas)
         return true
+        /*
+
+        try {
+            asignaturasRepository.findById(idAsignaturas)
+                ?: throw Exception ("idAsignaturas no existe")
+            asignaturasRepository.deleteById(id!!)
+            return true
+        }catch (ex:Exception){
+            throw Exception()
+        }
+
+        */
+
+
     }
+
+
 
     fun verificacionLetras(descricion:String?): Boolean{
         if(descricion?.length!! == 20){

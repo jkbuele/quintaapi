@@ -2,7 +2,7 @@ package com.colegio.quintaapi.service
 
 import com.colegio.quintaapi.model.Colegio
 import com.colegio.quintaapi.repository.ColegioRepository
-import com.colegio.quintaapi.repository.EstudianteRepository
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -22,33 +22,31 @@ class ColegioService {
     }
 
     fun save(colegio: Colegio): Colegio {
-        //validacion
-
         try {
             colegio.nombreC?.takeIf { it.trim().isNotEmpty() }
-                ?: throw Exception("Descripción no debe ser vacio")
+                ?: throw Exception("NombreC no debe ser vacio")
             colegio.direccion?.takeIf { it.trim().isNotEmpty() }
-                ?: throw Exception("Descripción no debe ser vacio")
+                ?: throw Exception("Direccion no debe ser vacio")
                 return colegioRepository.save(colegio)
-
         }
         catch(ex: Exception) {
             throw ResponseStatusException(
                 HttpStatus.NOT_FOUND, ex.message, ex)
         }
-
     }
 
     fun update(colegio: Colegio): Colegio {
         try {
+            colegio.nombreC?.takeIf {it.trim().isNotEmpty()}
+                ?: throw Exception("campo nombre vacio")
+            colegio.direccion?.takeIf {it.trim().isNotEmpty()}
+                ?: throw Exception("campo direccion vacio")
+
             val response = colegioRepository.findById(colegio.id)
                 ?: throw Exception("El ID ${colegio.id}  no existe")
 
-            if (colegio.nombreC.equals("") || colegio.direccion.equals("")) {
-                throw Exception("completar el campo ")
-            } else {
-                return colegioRepository.save(colegio)
-            }
+            return colegioRepository.save(colegio)
+
         }
         catch (ex: Exception){
             throw ResponseStatusException(
@@ -76,8 +74,16 @@ class ColegioService {
     }
 
 
-    fun delete (id:Long): Boolean{
-        colegioRepository.deleteById(id)
-        return true
+    fun delete (id :Long?): Boolean{
+        try{
+            colegioRepository.findById(id)
+                ?: throw Exception ("id no existe")
+            colegioRepository.deleteById(id!!)
+            return true
+
+        }catch (ex:Exception){
+            throw Exception()
+        }
+
     }
 }

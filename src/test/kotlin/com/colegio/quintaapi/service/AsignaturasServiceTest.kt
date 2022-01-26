@@ -1,6 +1,7 @@
 package com.colegio.quintaapi.service
 
 import com.colegio.quintaapi.model.Asignaturas
+import com.colegio.quintaapi.model.Estudiante
 
 import com.colegio.quintaapi.repository.AsignaturasRepository
 import com.google.gson.Gson
@@ -58,6 +59,41 @@ class AsignaturasServiceTest {
             Mockito.`when`(asignaturasRepository.save(Mockito.any(Asignaturas::class.java))).thenReturn(asignaturasMock)
             asignaturasService.save(asignaturasMock)
         }}
+
+    @Test
+    fun updateIsIdAsignCorrect() {
+        Mockito.`when`(asignaturasRepository.findById(returnObject.id)).thenReturn(returnObject)
+        Mockito.`when`(asignaturasRepository.save(Mockito.any(Asignaturas::class.java))).thenReturn(returnObject)
+        val response = asignaturasService.save(asignaturasMock)
+        Assertions.assertEquals(response.id, asignaturasMock.id)
+        Assertions.assertEquals(response.descricion, asignaturasMock.descricion)
+
+    }
+
+    @Test
+    fun updatedIdAsigNotExitsFailed() {
+
+        Assertions.assertThrows(Exception::class.java) {
+            Mockito.`when`(asignaturasRepository.findById(returnObject.id)).thenReturn(null)
+            Mockito.`when`(asignaturasRepository.save(Mockito.any(Asignaturas::class.java))).thenReturn(returnObject)
+            asignaturasService.update(asignaturasMock)
+
+        }
+    }
+
+    @Test
+    fun updateIsFailedDescricionEIsNull() {
+        Assertions.assertThrows(Exception::class.java) {
+            asignaturasMock.apply {
+                descricion = " "
+            }
+            Mockito.`when`(asignaturasRepository.findById(asignaturasMock.id)).thenReturn(asignaturasMock)
+            Mockito.`when`(asignaturasRepository.save(Mockito.any(Asignaturas::class.java))).thenReturn(asignaturasMock)
+            asignaturasService.update(asignaturasMock)
+
+        }}
+
+
 
 
 
