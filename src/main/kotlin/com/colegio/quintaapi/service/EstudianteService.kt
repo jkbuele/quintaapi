@@ -30,8 +30,8 @@ class EstudianteService {
         try {
             colegioRepository.findById(estudiante.colegioId)
                 ?: throw Exception("id del colegio no existe")
-            /*val response = colegioRepository.findById(estudiante.colegioId)
-                ?: throw Exception("El ID ${estudiante.colegioId}  no existe")*/
+            //val response = colegioRepository.findById(estudiante.colegioId)
+               // ?: throw Exception("El ID ${estudiante.colegioId}  no existe")
 
             estudiante.nombreE?.takeIf { it.trim().isNotEmpty() }
                 ?: throw Exception("Nombre Estudiante no debe ser vacio")

@@ -92,10 +92,4 @@ class AsignaturasServiceTest {
             asignaturasService.update(asignaturasMock)
 
         }}
-
-
-
-
-
-
 }

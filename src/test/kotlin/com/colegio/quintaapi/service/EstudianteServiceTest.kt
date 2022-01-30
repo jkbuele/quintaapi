@@ -34,14 +34,14 @@ class EstudianteServiceTest {
         nombreE = "alex"
         apellido = "bueno"
     }
-    /*@Test
+    @Test
     fun saveIsCorrecto() {
         Mockito.`when`(estudianteRepository.save(Mockito.any(Estudiante::class.java))).thenReturn(returnObject)
         val response = estudianteService.save(newObject)
-        Assertions.assertEquals(response.id, newObject.id)
+        Assertions.assertEquals(response.id , newObject.id)
         Assertions.assertEquals(response.nombreE, newObject.nombreE)
         Assertions.assertEquals(response.apellido, newObject.apellido)
-    }*/
+    }
 
     val jsonString = File("./src/test/resources/estudiante/crearEstudiante.json").readText(Charsets.UTF_8)
     val estudianteMock = Gson().fromJson(jsonString, Estudiante::class.java)
@@ -84,12 +84,10 @@ class EstudianteServiceTest {
 
     @Test
     fun updatedIdEstNotExitsFailed() {
-
         Assertions.assertThrows(Exception::class.java) {
             Mockito.`when`(estudianteRepository.findById(returnObject.id)).thenReturn(null)
             Mockito.`when`(estudianteRepository.save(Mockito.any(Estudiante::class.java))).thenReturn(returnObject)
             estudianteService.update(estudianteMock)
-
         }
     }
 
@@ -106,7 +104,7 @@ class EstudianteServiceTest {
         }}
 
     @Test
-    fun updateIsFailedAppelidoIsNull() {
+    fun updateIsFailedApelidoIsNull() {
         Assertions.assertThrows(Exception::class.java) {
             estudianteMock.apply {
                 apellido = " "

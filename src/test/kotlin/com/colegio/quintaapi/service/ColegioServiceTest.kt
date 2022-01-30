@@ -118,10 +118,6 @@ class ColegioServiceTest {
             Mockito.`when`(colegioRepository.findById(colegioMock.id)).thenReturn(colegioMock)
             Mockito.`when`(colegioRepository.save(Mockito.any(Colegio::class.java))).thenReturn(colegioMock)
             colegioService.update(colegioMock)
-
         }
     }
-
-
-
 }
