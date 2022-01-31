@@ -1,7 +1,7 @@
 package com.colegio.quintaapi.service
 
 
-import com.colegio.quintaapi.model.Colegio
+
 import com.colegio.quintaapi.model.Estudiante
 import com.colegio.quintaapi.repository.EstudianteRepository
 import com.google.gson.Gson
