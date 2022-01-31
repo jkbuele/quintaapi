@@ -88,12 +88,41 @@ class ColegioService {
 
     }
 
-    fun validarNombreC(colegio: Colegio) : Boolean{
-        val lista= listOf<String>("salesianas","febresC","benigno")
+    fun updateNombreC(colegio: Colegio) : Colegio{
+        try {
+            colegio.nombreC?.trim()?.isEmpty()
+                ?: throw Exception("El campo se encuentra vacío")
 
-        return true
 
+            val response = colegioRepository.findById(colegio.id)
+                ?: throw Exception("El ID ${colegio.id}  no existe")
+            response.apply {
+                this.nombreC = colegio.nombreC
+            }
+            return colegioRepository.save(response)
+        }
+        catch (ex: Exception) {
+            throw ResponseStatusException(
+                HttpStatus.NOT_FOUND, ex.message, ex)
+        }}
 
+    val listaColegios= listOf<String>("salesianas","benigno")
+
+    fun validarnombrec(nombreC: String):Boolean{
+        for (i in listaColegios){
+            if (nombreC == i){
+                return true
+            }
+        }
+        return false
 
     }
+
+
+
+
+
+
+
+
 }

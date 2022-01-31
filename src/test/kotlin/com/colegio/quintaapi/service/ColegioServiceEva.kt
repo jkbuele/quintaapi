@@ -122,7 +122,32 @@ class ColegioServiceEva {
     }
 
     @Test
-    fun validar(){
+    fun updateColegioFailedCate() {
+        Assertions.assertThrows(Exception::class.java) {
+            colegioMock.apply { nombreC = "    " }
+            Mockito.`when`(colegioRepository.save(Mockito.any(Colegio::class.java))).thenReturn(colegioMock)
+            colegioService.update(colegioMock)
+        }
+    }
+
+    @Test
+    fun updateColegioIsFailed() {
+        Assertions.assertThrows(Exception::class.java){
+            Mockito.`when`(colegioRepository.findById(returnObject.id)).thenReturn(null)
+
+            Mockito.`when`(colegioRepository.save(Mockito.any(Colegio::class.java))).thenReturn(returnObject)
+            colegioService.update(newObject)
+        }
+    }
+
+    @Test
+    fun updateColegioIsPassedList(){
+
+        Mockito.`when`(colegioRepository.findById(returnObject.id)).thenReturn(returnObject)
+        Mockito.`when`(colegioRepository.save(Mockito.any(Colegio::class.java))).thenReturn(returnObject)
+        val response = colegioService.update(newObject)
+        Assertions.assertEquals(response.id, newObject.id)
+        Assertions.assertEquals(response.nombreC, newObject.nombreC)
 
     }
 }
